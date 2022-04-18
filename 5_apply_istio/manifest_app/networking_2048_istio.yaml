@@ -1,0 +1,35 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: game-2048-api-gateway
+  namespace: game-2048
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "game-2048.armyost.com"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: game-2048-api-virtualservice
+  namespace: game-2048
+spec:
+  gateways:
+  - game-2048-api-gateway
+  hosts:
+  - "game-2048.armyost.com"
+  http:
+  - match:
+    - uri:
+        prefix: /
+    route:
+    - destination:
+        host: service-2048
+        port:
+          number: 80

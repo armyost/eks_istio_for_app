@@ -1,0 +1,35 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: Gateway
+metadata:
+  name: istio-jaeger-gateway
+  namespace: istio-system
+spec:
+  selector:
+    istio: ingressgateway
+  servers:
+  - port:
+      number: 80
+      name: http
+      protocol: HTTP
+    hosts:
+    - "istio-jaeger.armyost.com"
+---
+apiVersion: networking.istio.io/v1alpha3
+kind: VirtualService
+metadata:
+  name: istio-jaeger-virtualservice
+  namespace: istio-system
+spec:
+  gateways:
+    - istio-jaeger-gateway
+  hosts:
+    - "istio-jaeger.armyost.com"
+  http:
+  - match:
+    - uri:
+        prefix: /
+    route:
+    - destination:
+        host: tracing
+        port:
+          number: 80

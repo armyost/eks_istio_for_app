@@ -1,0 +1,9 @@
+# Apply Dashboard Deployments
+$ kubectl apply -f https://raw.githubusercontent.com/kubernetes/dashboard/v2.4.0/aio/deploy/recommended.yaml
+
+# Apply ALB Ingress for Dashboard
+$ kubectl apply -f ingress-dashboard.yaml
+
+# Apply SA and Secret
+$ kubectl apply -f eks-admin-service-account.yaml
+$ kubectl -n kube-system describe secret $(kubectl -n kube-system get secret | grep eks-admin | awk '{print $1}')

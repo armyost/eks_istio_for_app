@@ -1,0 +1,5 @@
+#metric server for mornitoring resource
+$ helm repo update
+$ helm repo list
+$ helm search repo stable/metrics-server
+$ helm install metrics-server stable/metrics-server --version 2.11.4 --namespace kube-system

@@ -1,0 +1,29 @@
+#Install Istio
+$ curl -L https://istio.io/downloadIstio | sh -
+$ cd istio-1.13
+$ echo "export PATH=$PWD/bin:$PATH" >> ~/.bash_profile
+$ source ~/.bash_profile
+
+# Install Istio with default-profile with ALB Ingress setting
+$ istioctl install --set profile=default --set values.gateways.istio-ingressgateway.type=NodePort -y
+
+# Making ALB Ingress to istio-ingressgateway
+$ kubectl apply -f istio-external-ingress.yaml
+
+# Install Grafana, Zipkin.. Addon
+$ kubectl apply -f istio-1.13.2/samples/addons
+
+# Under this namespace, istio can control by Default
+$ kubectl label namespace game-2048 istio-injection=enabled
+$ kubectl get ns -o jsonpath='{range .items[*]}{.metadata.name}{"\t"}{.metadata.labels}{"\t"}{"\n"}{end}'
+
+# Istio setting injection in deployment-Public Service
+$ istioctl kube-inject -f my-app.yaml -o deployment_2048_istio.yaml
+
+# Istio setting need ClusterIP Service not NodePort-Public Service
+
+# Deploy App Resources in k8s with istio addon
+$ kubectl apply -f ./manifest_app/*.yaml
+
+# Making Istio Gateway and VirtualMachine for monitor commponents
+$ kubectl apply -f ./manifest_monitor/*.yaml
