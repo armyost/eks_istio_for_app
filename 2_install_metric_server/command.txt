@@ -1,5 +1,11 @@
-#metric server for mornitoring resource
+# Install Prometheus-Stack for mornitoring Metric
+$ kubectl create namespace prometheus
+$ helm repo add prometheus https://prometheus-community.github.io/helm-charts
 $ helm repo update
-$ helm repo list
-$ helm search repo stable/metrics-server
-$ helm install metrics-server stable/metrics-server --version 2.11.4 --namespace kube-system
+$ helm search repo prometheus
+$ helm install prometheus prometheus/kube-prometheus-stack --namespace prometheus
+
+# Delete Grafana in the stack. Because I will use Grafana at Step 5 for Integrating whole datasource in one Dashboard.
+$ kubectl delete service prometheus-grafana -n prometheus
+$ kubectl delete deployment prometheus-grafana -n prometheus
+
